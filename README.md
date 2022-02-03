@@ -1,1 +1,1 @@
-# useGlobalState
+# useLocalStorage
