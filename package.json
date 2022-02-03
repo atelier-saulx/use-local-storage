@@ -1,7 +1,7 @@
 {
   "name": "@based/use-local-storage",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "https://github.com/atelier-saulx/use-global-state",
   "description": "Like @based/use-global-state but with localStorage",
   "dependencies": {
