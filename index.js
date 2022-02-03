@@ -19,6 +19,29 @@ const parseLocalStorage = (value) => {
   return value;
 };
 
+const setLocalStorage = (key, value) => {
+  try {
+    if (value === null || value === undefined) {
+      localStorage.removeItem(key);
+    } else if (typeof value === "object") {
+      localStorage.setItem(
+        key,
+        JSON.stringify(
+          value instanceof Set
+            ? {
+                __set__: Array.from(value),
+              }
+            : value
+        )
+      );
+    } else {
+      localStorage.setItem(key, value);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 const useLocalStorage = (key, defaultValue = undefined) => {
   const [state, setState] = useGlobalState(`__local__${key}`, () => {
     try {
@@ -30,29 +53,6 @@ const useLocalStorage = (key, defaultValue = undefined) => {
 
     return defaultValue;
   });
-
-  useEffect(() => {
-    try {
-      if (state === null || state === undefined) {
-        localStorage.removeItem(key);
-      } else if (typeof state === "object") {
-        localStorage.setItem(
-          key,
-          JSON.stringify(
-            state instanceof Set
-              ? {
-                  __set__: Array.from(state),
-                }
-              : state
-          )
-        );
-      } else {
-        localStorage.setItem(key, state);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [key, state]);
 
   useEffect(() => {
     if (!listenerMap) {
@@ -77,7 +77,13 @@ const useLocalStorage = (key, defaultValue = undefined) => {
     };
   }, [key]);
 
-  return [state, setState];
+  return [
+    state,
+    (state) => {
+      setLocalStorage(key, state);
+      setState(state);
+    },
+  ];
 };
 
 export default useLocalStorage;
