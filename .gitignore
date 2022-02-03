@@ -1,0 +1,8 @@
+# Mac
+.DS_Store
+
+# Vim
+.swap
+
+# Node
+node_modules

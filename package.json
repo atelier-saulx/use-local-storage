@@ -1,0 +1,25 @@
+{
+  "name": "@based/use-local-storage",
+  "main": "index.js",
+  "version": "0.1.0",
+  "repository": "https://github.com/atelier-saulx/use-global-state",
+  "description": "Like @based/use-global-state but with localStorage",
+  "dependencies": {
+    "@based/use-global-state": "^0.2.1",
+    "react": "^17.0.2"
+  },
+  "keywords": [
+    "localStorage",
+    "useState",
+    "global",
+    "router",
+    "react",
+    "hook"
+  ],
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "saulx",
+  "license": "MIT"
+}
