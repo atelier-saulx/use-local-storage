@@ -1,5 +1,8 @@
-import { useEffect } from "react";
-import useGlobalState, { setGlobalState } from "@based/use-global-state";
+import { useEffect, useCallback } from "react";
+import useGlobalState, {
+  setGlobalState,
+  getGlobalState,
+} from "@based/use-global-state";
 
 let listenerMap;
 const listener = ({ key, newValue }) =>
@@ -19,7 +22,7 @@ const parseLocalStorage = (value) => {
   return value;
 };
 
-const setLocalStorage = (key, value) => {
+export const setLocalStorage = (key, value) => {
   try {
     if (value === null || value === undefined) {
       localStorage.removeItem(key);
@@ -40,19 +43,26 @@ const setLocalStorage = (key, value) => {
   } catch (e) {
     console.error(e);
   }
+
+  return setGlobalState(`__local__${key}`, value);
+};
+
+export const getLocalStorage = (key) => {
+  try {
+    const storage = localStorage.getItem(key);
+    return parseLocalStorage(storage);
+  } catch (e) {
+    console.warn("no localStorage available");
+  }
+
+  return null;
 };
 
 const useLocalStorage = (key, defaultValue = undefined) => {
-  const [state, setState] = useGlobalState(`__local__${key}`, () => {
-    try {
-      const storage = localStorage.getItem(key);
-      return parseLocalStorage(storage) || defaultValue;
-    } catch (e) {
-      console.warn("no localStorage available");
-    }
-
-    return defaultValue;
-  });
+  const [state] = useGlobalState(
+    `__local__${key}`,
+    () => getLocalStorage(key) || defaultValue
+  );
 
   useEffect(() => {
     if (!listenerMap) {
@@ -77,13 +87,7 @@ const useLocalStorage = (key, defaultValue = undefined) => {
     };
   }, [key]);
 
-  return [
-    state,
-    (state) => {
-      setLocalStorage(key, state);
-      setState(state);
-    },
-  ];
+  return [state, useCallback((state) => setLocalStorage(key, state), [key])];
 };
 
 export default useLocalStorage;

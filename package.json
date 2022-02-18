@@ -1,13 +1,19 @@
 {
   "name": "@based/use-local-storage",
-  "main": "index.js",
-  "version": "0.2.1",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "version": "0.4.0",
   "repository": "https://github.com/atelier-saulx/use-global-state",
   "description": "Like @based/use-global-state but with localStorage",
   "dependencies": {
-    "@based/use-global-state": "^0.2.1",
-    "react": "^17.0.2"
+    "@based/use-global-state": "^0.3.0"
   },
+  "peerDependencies": {
+    "react": "16||17||18"
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "localStorage",
     "useState",
@@ -16,9 +22,21 @@
     "react",
     "hook"
   ],
-  "devDependencies": {},
+  "tsup": {
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "minify": false,
+    "platform": "browser",
+    "sourcemap": true
+  },
+  "devDependencies": {
+    "tsup": "^5.11.13"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup src/index.ts",
+    "dev": "tsup src/index.ts --watch"
   },
   "author": "saulx",
   "license": "MIT"
