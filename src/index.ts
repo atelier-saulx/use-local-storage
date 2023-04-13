@@ -1,8 +1,5 @@
 import { useEffect, useCallback } from "react";
-import useGlobalState, {
-  setGlobalState,
-  getGlobalState,
-} from "@based/use-global-state";
+import useGlobalState, { setGlobalState } from "@based/use-global-state";
 
 let listenerMap;
 const listener = ({ key, newValue }) =>
