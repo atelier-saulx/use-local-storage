@@ -3,7 +3,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "version": "1.0.0",
-  "repository": "https://github.com/atelier-saulx/use-global-state",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atelier-saulx/use-global-state.git"
+  },
   "description": "Like @based/use-global-state but with localStorage",
   "dependencies": {
     "@based/use-global-state": "^0.2.4"
