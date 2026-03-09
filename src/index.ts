@@ -1,11 +1,14 @@
 import { useEffect, useCallback } from "react";
 import useGlobalState, { setGlobalState } from "@based/use-global-state";
 
-let listenerMap;
-const listener = ({ key, newValue }) =>
-  setGlobalState(`__local__${key}`, parseLocalStorage(newValue));
+let listenerMap: Map<string, number> | null = null;
+const listener = ({ key, newValue }: StorageEvent) => {
+  if (key) {
+    setGlobalState(`__local__${key}`, parseLocalStorage(newValue));
+  }
+};
 
-const parseLocalStorage = (value) => {
+const parseLocalStorage = (value: string | null): any => {
   if (value !== null) {
     try {
       const obj = JSON.parse(value);
@@ -19,7 +22,7 @@ const parseLocalStorage = (value) => {
   return value;
 };
 
-export const setLocalStorage = (key, value) => {
+export const setLocalStorage = (key: string, value: any): any => {
   try {
     if (value === null || value === undefined) {
       localStorage.removeItem(key);
@@ -31,8 +34,8 @@ export const setLocalStorage = (key, value) => {
             ? {
                 __set__: Array.from(value),
               }
-            : value
-        )
+            : value,
+        ),
       );
     } else {
       localStorage.setItem(key, value);
@@ -44,7 +47,7 @@ export const setLocalStorage = (key, value) => {
   return setGlobalState(`__local__${key}`, value);
 };
 
-export const getLocalStorage = (key) => {
+export const getLocalStorage = (key: string): any => {
   try {
     const storage = localStorage.getItem(key);
     return parseLocalStorage(storage);
@@ -55,10 +58,13 @@ export const getLocalStorage = (key) => {
   return null;
 };
 
-const useLocalStorage = (key, defaultValue = undefined) => {
-  const [state] = useGlobalState(
+const useLocalStorage = <T = any>(
+  key: string,
+  defaultValue?: T,
+): [T, (state: T) => void] => {
+  const [state] = useGlobalState<T>(
     `__local__${key}`,
-    () => getLocalStorage(key) || defaultValue
+    () => getLocalStorage(key) || defaultValue,
   );
 
   useEffect(() => {
@@ -71,20 +77,20 @@ const useLocalStorage = (key, defaultValue = undefined) => {
     listenerMap.set(key, cnt + 1);
 
     return () => {
-      const cnt = listenerMap.get(key) || 0;
+      const cnt = listenerMap?.get(key) || 0;
       if (cnt > 1) {
-        listenerMap.set(key, cnt - 1);
+        listenerMap?.set(key, cnt - 1);
       } else {
-        listenerMap.delete(key);
+        listenerMap?.delete(key);
       }
-      if (!listenerMap.size) {
+      if (listenerMap && !listenerMap.size) {
         listenerMap = null;
         window.removeEventListener("storage", listener);
       }
     };
   }, [key]);
 
-  return [state, useCallback((state) => setLocalStorage(key, state), [key])];
+  return [state, useCallback((state: T) => setLocalStorage(key, state), [key])];
 };
 
 export default useLocalStorage;
