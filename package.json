@@ -9,10 +9,10 @@
   },
   "description": "Like @based/use-global-state but with localStorage",
   "dependencies": {
-    "@based/use-global-state": "^0.2.4"
+    "@based/use-global-state": "^0.2.5"
   },
   "peerDependencies": {
-    "react": "16||17||18||19"
+    "react": "*"
   },
   "files": [
     "dist"
