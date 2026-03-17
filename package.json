@@ -2,7 +2,7 @@
   "name": "@based/use-local-storage",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atelier-saulx/use-global-state.git"
