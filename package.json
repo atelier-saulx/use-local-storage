@@ -1,8 +1,15 @@
 {
   "name": "@based/use-local-storage",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.2",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "version": "1.0.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atelier-saulx/use-global-state.git"
@@ -12,7 +19,7 @@
     "@based/use-global-state": "^0.2.5"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": ">16"
   },
   "files": [
     "dist"
